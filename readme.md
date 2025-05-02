@@ -9,13 +9,13 @@ By the end of the lab, you’ll have a functional and well-structured API that s
 ## 🔍 Lab overview
 - We'll begin by building a basic working API, storing Todos in memory, without worrying about architecture.
 - Next, we’ll refactor the project into a 3-tier architecture to improve separation of concerns.
-- We'll then evolve the design into a more scalable and maintainable Hexagonal Architecture (also known as Ports and Adapters).
+- We'll then evolve the architecture into a more scalable and maintainable Hexagonal Architecture (also known as Ports and Adapters).
 - Using this new structure, we'll implement an alternative persistence method using CSV files.
 - Finally, we’ll make the app configurable so it can switch between in-memory and CSV-based storage at startup.
 
 ## 📥 Submission
 
-Please submit your completed lab by May 13th at 23:59, via email. You will receive a bonus point if you submit your work through a public Git repository (e.g., GitHub, GitLab) and share the link in your email. Make sure your repository is well-organized and clearly reflects the steps of the lab.
+Please submit your completed lab by May 13th 23:59, via email. You will receive a bonus point if you submit your work through a public Git repository (e.g., GitHub, GitLab) and share the link in your email. Make sure your repository is well-organized and clearly reflects the steps of the lab.
 
 ## 📝 Grading
 
@@ -32,7 +32,7 @@ Keep in mind: This lab is mostly about **architecting** a project. Do not spend 
 
 ## Before you start
 
-It is recommended that you read the again the `Architecture` section of the Clean Code course.
+It is recommended that you read again the `Architecture` section of the Clean Code course.
 
 It is strongly recommended to use the provided starter Java project, which includes a pre-configured API to help you get up and running quickly.
 
