@@ -153,6 +153,8 @@ Now your code in the Presentation Layer should have errors because instantiating
 private final TodoManager todoManager = new TodoManager(new TodoRepository());
 ```
 
+<ins>Optional</ins>: we could also go further and have our `TodoController` accept an `ITodoRespository` in its constructor rather than letting it decide the implementation it is using. Then the TodoRepository would be instantiated in the `Main` class and injected to `TodoController` there.
+
 # Step 4 : Implement another adapter for the ITodoRepository port. (~45 min)
 
 One of the purposes of the Hexagonal architecture is to make the code modular. So far, the Application gets **injected** a `TodoRepository`, which is an in-memory implementation of the `ITodoRepository`. In this next step, we will create another implentation of the `ITodoRepository`, which will be using a csv file to store the todos. And we will inject it instead of the in memory implementation.
