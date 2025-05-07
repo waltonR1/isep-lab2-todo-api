@@ -176,9 +176,9 @@ Here is an example for the project Hierarchy that you may have at this point :
     - TodoManager.java
     - ITodoRepository.java
 - /persistence
-    - /in-memory
+    - /inmemory
         - TodoInMemoryRepository.Java
-    - /csv-files
+    - /csvfiles
         - TodoCsvFilesRepository.Java
 ```
 
