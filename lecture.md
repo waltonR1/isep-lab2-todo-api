@@ -1,7 +1,3 @@
-This course is easier to read in its markdown version :
-- download from https://lananas.cloud/s/yXLH3AEtxRqDQQy/download
-- copy and paste the content of the .md file in a markdown viewer such as https://dillinger.io/
-
 # Clean Code
 
 ## 0. Introduction
