@@ -1,6 +1,6 @@
 package org.isep.cleancode;
 
-class Todo {
+public class Todo {
 
     // this Todo class should be completed to achieve Step 1
 

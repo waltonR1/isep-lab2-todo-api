@@ -32,7 +32,7 @@ Keep in mind: This lab is mostly about **architecting** a project. Do not spend 
 
 ## Before you start
 
-It is recommended that you read again the `Architecture` section of the Clean Code course.
+It is recommended that you <ins>read again the `Architecture` section of the [Clean Code lecture](lecture.md) .</ins>
 
 It is strongly recommended to use the provided starter Java project, which includes a pre-configured API to help you get up and running quickly.
 
@@ -74,26 +74,26 @@ Here is an example way of designing the 2 endpoints
 `GET /todos`
 - Returns a 200 with all todos.
 
-The starter project already have most of the API covered. You only have to complete the `Todo` and `TodoController` classes to ensure that the business rules listed earlier are respected.
+The starter project already have most of the API covered. You only have to <ins>complete the `Todo` and `TodoController` classes to ensure that the business rules listed earlier are respected</ins>.
 
-Remember to test your API. Try to create several Todos and to list them.
+Remember to <ins>test your API</ins>. Try to create several Todos and to list them.
 
 # Step 2 : Split the code into a 3 tier architecture (~30 min)
 
 Now that we have a working Web API for our Todos, we will focus on its **architecture**. In this step, we will turn our "1-tier" architecture into a **3-tier architecture**. It will allow us to clearly separate the code according to its responsibilities
 
-For that, we will split and move our code in 3 distinct layers :
+For that, you will <ins>split and move yur code in 3 distinct layers</ins> :
 - **DataPersistence** layer
   - Contains the code that stores and retrieves Todos in and from an in-memory collection of Todos
-  - It may contain, for example, a `TodoRepository` class
+  - <ins>It may contain, for example, a `TodoRepository` class</ins>
 - **Application** layer
   - Contains the Business logic and rules, the use cases of the Application.
-  - It may contain, for example, a `TodoManager` class which instantiates a `TodoRepository` object to work with.
+  - <ins>It may contain, for example, a `TodoManager` class which instantiates a `TodoRepository` object to work with</ins>. The `TodoManager` class should ensure business rules and throw exceptions when they are not respected, or use an alternative way, such as error codes.  
 - **Presentation** layer
   - Contains the API endpoints
-  - It may instantiate a `TodoManager` object to work with
+  - <ins>It may contain the `TodoController` class, which may instantiate a `TodoManager` object to work with</ins>
 
-To achieve this, you may separate your code into 3 different folders. Or, even better (but you are not required to), into different independant modules.
+To achieve this, you may <ins>separate your code into 3 different packages</ins>. Or, even better (but you are not required to), into different independant modules.
 
 The code of the presentation layer should be calling the code of the application layer, which should be calling the code of the data persistence layer.
 
@@ -112,7 +112,7 @@ By the end of this step, your project hierarchy should look similar to this :
     - TodoRepository.java
 ```
 
-Test your API and make sure it still works !
+<ins>Test your API</ins> and make sure it still works !
 
 This architecture is a good start. It makes the code a bit easier to maintain. But it is still not very scalable, nor is it extensible. What if we want to add another means of persistence for our Todos ? Such as a proper database, or CSV files ? We would be forced to rewrite the TodoRepository. But what if we also want to keep the in-memory persistence implementation for testing purpose ?
 
@@ -132,38 +132,36 @@ to
 
 `(Presentation) => (Application) <= (Data Persistence)`
 
-To do so, the Application Layer will declare an **Outbound Port** (an interface) for the Data Persistence to **adapt** (implement) :
+To do so, <ins>the Application Layer will declare an **Outbound Port** (an interface)</ins> for the Data Persistence to **adapt** (implement) :
 
 /application/ITodoRepository.java
 ```java 
 public interface ITodoRepository {
-  void AddTodo(Todo todo);
-  List<Todo> GetAllTodos();
+  void addTodo(Todo todo);
+  List<Todo> getAllTodos();
 }
 ```
 
-Then, make the `TodoRepository` class implement this interface. The class `TodoRepository` is now an **adapter** for the `ITodoRepository` **port**.
+Then, <ins>make the `TodoRepository` class implement this interface</ins>. The class `TodoRepository` is now an **adapter** for the `ITodoRepository` **port**.
 
-Now the `TodoManager` class from the Application Layer will work with an `ITodoRepository` instead of a `TodoRepository`. And we will apply the 5th SOLID principle: "Dependency Inversion". Update `TodoManager` to accept an `ITodoRepository` through its constructor, and use it instead of the `TodoRepository`. In doing so, the Application Layer is not responsible anymore for choosing the implementation of the `ITodoRepository`, the only thing that it cares about is to receive any implementation of this interface.
+Now the `TodoManager` class from the Application Layer will work with an `ITodoRepository` instead of a `TodoRepository`. And we will apply the 5th SOLID principle: "Dependency Inversion". <ins>Update `TodoManager` to accept an `ITodoRepository` through its constructor, and use it instead of the `TodoRepository`</ins>. In doing so, the Application Layer is not responsible anymore for choosing the implementation of the `ITodoRepository`, the only thing that it cares about is to receive any implementation of this interface.
 
-Now your code in the Presentation Layer should have errors because instantiating a `TodoManager` requires to give it an implementation of `ITodoRepository`. Well, let's just instantiate a `TodoRepository` right before, and pass it to the `TodoManager` constructor.
+Now your code in the Presentation Layer should have errors because instantiating a `TodoManager` requires to give it an implementation of `ITodoRepository`. Well, <ins>let's just instantiate a `TodoRepository` and pass it to the `TodoManager` constructor<ins>.
 
 /presentation/TodoController.java
 ```java 
-TodoRepository TodoRepository = new TodoRepository();
-
-TodoManager todoManager = new TodoManager(todoRepository);
+private final TodoManager todoManager = new TodoManager(new TodoRepository());
 ```
 
 # Step 4 : Implement another adapter for the ITodoRepository port. (~45 min)
 
 One of the purposes of the Hexagonal architecture is to make the code modular. So far, the Application gets **injected** a `TodoRepository`, which is an in-memory implementation of the `ITodoRepository`. In this next step, we will create another implentation of the `ITodoRepository`, which will be using a csv file to store the todos. And we will inject it instead of the in memory implementation.
 
-The first thing we are going to do is to rename the `TodoRepository` class to `TodoInMemoryRepository` in order to clarify what this implementation is doing.
+The first thing we are going to do is to <ins>rename the `TodoRepository` class to `TodoInMemoryRepository`</ins> in order to clarify what this implementation is doing.
 
-And then we will create another implementation of `ITodoRepository` which we are going to call `TodoCsvFilesRepository`.
+And then we will <ins>create another implementation of `ITodoRepository` which we are going to call `TodoCsvFilesRepository`</ins>. It should read and write the Todos from and to a csv file located anywhere on your system (preferably somewhere in the AppData folder by using `System.getenv("APPDATA")`).
 
-It is recommended that those 2 implementations live in two distinct folders and that they do not share code. The cleaner way to enforce this would be to make them into 2 distinct modules (but once again, you are not required to).
+It is recommended that <ins>the 2 implementations (InMemory and Csv) live in two distinct packages</ins> and that they do not share code. The cleaner way to enforce this would be to make them into 2 distinct modules (but once again, you are not required to).
 
 Here is an example for the project Hierarchy that you may have at this point :
 
@@ -186,12 +184,12 @@ Now the dependency graph of the project looks like this :
 
 `(Presentation) => (Application) <= (In Memory Data Persistence) / (Csv Files Data Persistence)`
 
-Now, in the Presentation Layer, make sure to instantiate a `TodoCsvFilesRepository` instead of a `TodoInMemoryRepository`, and test your API again !
+Now, <ins>in the Presentation Layer, make sure to instantiate a `TodoCsvFilesRepository` instead of a `TodoInMemoryRepository`</ins>, and test your API again !
 
 # Step 5 (Bonus) : Make a way to select adapter at startup time (~30 min)
 
 The goal of this optional step is to make your program configurable so you can either start it with an in-memory or a csv files implementation of the repository. Swapping from to the other should not require to rebuild the code.
 
-Here are 2 ways to achieve this, you may **choose one of them** (not both) and implement it to get bonus points !
+Here are 2 ways to achieve this, you may **choose one of them** (not both) and <ins>implement it to get bonus points</ins> !
 - (+1 bonus point) use a command line argument that specifies the repository implementation (example: repo="INMEMORY")
 - (+2 bonus points) use a configuration file (provided via command-line argument) to specify the repository implementation.
