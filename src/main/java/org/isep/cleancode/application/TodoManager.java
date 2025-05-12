@@ -1,12 +1,14 @@
 package org.isep.cleancode.application;
 
 import org.isep.cleancode.Todo;
-import org.isep.cleancode.persistence.TodoRepository;
-
 import java.util.List;
 
 public class TodoManager {
-    private final TodoRepository repository = new TodoRepository();
+    private final ITodoRepository repository;
+
+    public TodoManager(ITodoRepository repository) {
+        this.repository = repository;
+    }
 
     public String addTodo(Todo todo) {
         if (!todo.isValid()) {
